@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>978</width>
+    <height>689</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>游戏编辑器v0.2</string>
+  </property>
+  <property name="dockNestingEnabled">
+   <bool>false</bool>
+  </property>
+  <property name="dockOptions">
+   <set>QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::ForceTabbedDocks</set>
+  </property>
+  <property name="unifiedTitleAndToolBarOnMac">
+   <bool>false</bool>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QMdiArea" name="mdiArea">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="viewMode">
+       <enum>QMdiArea::TabbedView</enum>
+      </property>
+      <property name="tabShape">
+       <enum>QTabWidget::Rounded</enum>
+      </property>
+      <property name="tabPosition">
+       <enum>QTabWidget::South</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>978</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="actNew"/>
+    <addaction name="actOpen"/>
+    <addaction name="actSave"/>
+    <addaction name="actSaveAs"/>
+    <addaction name="separator"/>
+    <addaction name="actQuit"/>
+   </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>编辑</string>
+    </property>
+    <addaction name="actUndo"/>
+    <addaction name="actRedo"/>
+    <addaction name="separator"/>
+    <addaction name="actCut"/>
+    <addaction name="actCopy"/>
+    <addaction name="actPaste"/>
+    <addaction name="actDel"/>
+    <addaction name="separator"/>
+    <addaction name="actZoomIn"/>
+    <addaction name="actZoomOut"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>地图</string>
+    </property>
+    <addaction name="actImportSprite"/>
+    <addaction name="actMapSet"/>
+    <addaction name="actRefreshMap"/>
+   </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>视图</string>
+    </property>
+    <addaction name="actShowLayer"/>
+    <addaction name="actShowHistory"/>
+    <addaction name="actShowSprite"/>
+    <addaction name="actShowEvent"/>
+    <addaction name="separator"/>
+    <addaction name="actIsMoveChooseSprite"/>
+    <addaction name="actShowChooseSpriteRect"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>设置</string>
+    </property>
+    <addaction name="actMapPathSetting"/>
+    <addaction name="actSpritePathSetting"/>
+    <addaction name="actImagePathSetting"/>
+    <addaction name="actSpriteConfigPathSetting"/>
+    <addaction name="actRestoresDefault"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu"/>
+   <addaction name="menu_3"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonIconOnly</enum>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="separator"/>
+   <addaction name="actNew"/>
+   <addaction name="actOpen"/>
+   <addaction name="actSave"/>
+   <addaction name="separator"/>
+   <addaction name="actUndo"/>
+   <addaction name="actRedo"/>
+   <addaction name="separator"/>
+   <addaction name="actZoomIn"/>
+   <addaction name="actZoomOut"/>
+   <addaction name="actOriginal"/>
+   <addaction name="separator"/>
+   <addaction name="actMapEdit"/>
+   <addaction name="actDragMapSprite"/>
+   <addaction name="actPath"/>
+   <addaction name="actEvent"/>
+   <addaction name="separator"/>
+   <addaction name="actShowGrid"/>
+   <addaction name="actPasteGrid"/>
+   <addaction name="actionPasteGridMiddle"/>
+   <addaction name="separator"/>
+   <addaction name="actChangeColor"/>
+   <addaction name="actRefreshMap"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actNew">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/new/prefix1/images/new.png</normaloff>:/new/prefix1/images/new.png</iconset>
+   </property>
+   <property name="text">
+    <string>新建</string>
+   </property>
+  </action>
+  <action name="actOpen">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/new/prefix1/images/open.png</normaloff>:/new/prefix1/images/open.png</iconset>
+   </property>
+   <property name="text">
+    <string>打开</string>
+   </property>
+  </action>
+  <action name="actSave">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/new/prefix1/images/save.png</normaloff>:/new/prefix1/images/save.png</iconset>
+   </property>
+   <property name="text">
+    <string>保存</string>
+   </property>
+   <property name="toolTip">
+    <string>保存</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actSaveAs">
+   <property name="text">
+    <string>另存为</string>
+   </property>
+   <property name="toolTip">
+    <string>另存为</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+S</string>
+   </property>
+  </action>
+  <action name="actQuit">
+   <property name="text">
+    <string>退出</string>
+   </property>
+   <property name="toolTip">
+    <string>退出</string>
+   </property>
+  </action>
+  <action name="actZoomIn">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/new/prefix1/images/ZoomIn.png</normaloff>:/new/prefix1/images/ZoomIn.png</iconset>
+   </property>
+   <property name="text">
+    <string>放大</string>
+   </property>
+   <property name="toolTip">
+    <string>放大</string>
+   </property>
+  </action>
+  <action name="actZoomOut">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/new/prefix1/images/ZoomOut.png</normaloff>:/new/prefix1/images/ZoomOut.png</iconset>
+   </property>
+   <property name="text">
+    <string>缩小</string>
+   </property>
+   <property name="toolTip">
+    <string>缩小</string>
+   </property>
+  </action>
+  <action name="actUndo">
+   <property name="text">
+    <string>撤销</string>
+   </property>
+   <property name="toolTip">
+    <string>撤销</string>
+   </property>
+  </action>
+  <action name="actRedo">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>还原</string>
+   </property>
+   <property name="toolTip">
+    <string>还原</string>
+   </property>
+  </action>
+  <action name="actCut">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/new/prefix1/images/cut.png</normaloff>:/new/prefix1/images/cut.png</iconset>
+   </property>
+   <property name="text">
+    <string>剪切</string>
+   </property>
+   <property name="toolTip">
+    <string>剪切</string>
+   </property>
+  </action>
+  <action name="actCopy">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/new/prefix1/images/copy.png</normaloff>:/new/prefix1/images/copy.png</iconset>
+   </property>
+   <property name="text">
+    <string>复制</string>
+   </property>
+   <property name="toolTip">
+    <string>复制</string>
+   </property>
+  </action>
+  <action name="actPaste">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/new/prefix1/images/paste.png</normaloff>:/new/prefix1/images/paste.png</iconset>
+   </property>
+   <property name="text">
+    <string>粘贴</string>
+   </property>
+   <property name="toolTip">
+    <string>粘贴</string>
+   </property>
+  </action>
+  <action name="actDel">
+   <property name="text">
+    <string>删除</string>
+   </property>
+   <property name="toolTip">
+    <string>删除</string>
+   </property>
+  </action>
+  <action name="actNewSprite">
+   <property name="text">
+    <string>新建精灵</string>
+   </property>
+  </action>
+  <action name="actOriginal">
+   <property name="text">
+    <string>实际大小</string>
+   </property>
+   <property name="toolTip">
+    <string>实际大小</string>
+   </property>
+  </action>
+  <action name="actOpenSprite">
+   <property name="text">
+    <string>打开精灵</string>
+   </property>
+  </action>
+  <action name="actImportSprite">
+   <property name="text">
+    <string>导入精灵</string>
+   </property>
+   <property name="toolTip">
+    <string>导入sprite</string>
+   </property>
+  </action>
+  <action name="actMapEdit">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>编辑</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+E</string>
+   </property>
+  </action>
+  <action name="actDragMapSprite">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>拖拽</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+M</string>
+   </property>
+  </action>
+  <action name="actMapSet">
+   <property name="text">
+    <string>地图设置</string>
+   </property>
+  </action>
+  <action name="actShowGrid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>网格</string>
+   </property>
+   <property name="toolTip">
+    <string>显示网格</string>
+   </property>
+  </action>
+  <action name="actPasteGrid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>吸附</string>
+   </property>
+   <property name="toolTip">
+    <string>网格吸附</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+B</string>
+   </property>
+   <property name="shortcutContext">
+    <enum>Qt::WindowShortcut</enum>
+   </property>
+  </action>
+  <action name="actChangeColor">
+   <property name="text">
+    <string>改变底色</string>
+   </property>
+   <property name="toolTip">
+    <string>改变编辑区底色</string>
+   </property>
+  </action>
+  <action name="actShowLayer">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>显示图层</string>
+   </property>
+  </action>
+  <action name="actShowHistory">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>显示历史</string>
+   </property>
+  </action>
+  <action name="actShowSprite">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>显示精灵</string>
+   </property>
+  </action>
+  <action name="actIsMoveChooseSprite">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>移动精灵</string>
+   </property>
+   <property name="toolTip">
+    <string>移动精灵</string>
+   </property>
+  </action>
+  <action name="actShowChooseSpriteRect">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>显示边框</string>
+   </property>
+  </action>
+  <action name="actRefreshMap">
+   <property name="text">
+    <string>刷新地图</string>
+   </property>
+  </action>
+  <action name="actPath">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>路线</string>
+   </property>
+   <property name="toolTip">
+    <string>路线</string>
+   </property>
+  </action>
+  <action name="actShowEvent">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>显示事件</string>
+   </property>
+  </action>
+  <action name="actEvent">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>事件</string>
+   </property>
+   <property name="toolTip">
+    <string>事件</string>
+   </property>
+  </action>
+  <action name="actMapPathSetting">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Map目录设置</string>
+   </property>
+  </action>
+  <action name="actSpritePathSetting">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Sprite目录设置</string>
+   </property>
+  </action>
+  <action name="actImagePathSetting">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Image目录设置</string>
+   </property>
+  </action>
+  <action name="actSpriteConfigPathSetting">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Sprite Config目录设置</string>
+   </property>
+  </action>
+  <action name="actRestoresDefault">
+   <property name="text">
+    <string>恢复默认设置</string>
+   </property>
+  </action>
+  <action name="actionPasteGridMiddle">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>中点吸附</string>
+   </property>
+   <property name="toolTip">
+    <string>中点吸附</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
+ <connections/>
+</ui>

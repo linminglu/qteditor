@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>名字</string>
+	<key>gold</key>
+	<string>金币</string>
+	<key>cash</key>
+	<string>现金</string>
+	<key>announcement</key>
+	<string>奖励公告</string>
+	<key>task</key>
+	<string>任务</string>
+	<key>explore</key>
+	<string>探险</string>
+	<key>lineup</key>
+	<string>阵容设置</string>
+	<key>patch</key>
+	<string>碎片</string>
+	<key>mall</key>
+	<string>商城</string>
+	<key>email</key>
+	<string>邮件</string>
+	<key>option</key>
+	<string>选项</string>
+	<key>mainTask</key>
+	<string>主线任务</string>
+	<key>auction</key>
+	<string>拍卖</string>
+	<key>merchant</key>
+	<string>商人</string>
+	<key>entrustedTask</key>
+	<string>委托任务</string>
+	<key>concourse</key>
+	<string>中央大厅</string>
+	<key>hp</key>
+	<string>健康值</string>
+	<key>ap</key>
+	<string>体力值</string>
+	<key>currentTask</key>
+	<string>当前任务</string>
+	<key>captaincaptain</key>
+	<string>队长</string>
+	<key>attack</key>
+	<string>攻坚</string>
+	<key>destroys</key>
+	<string>破阵</string>
+	<key>lore</key>
+	<string>绝杀</string>
+	<key>intervene</key>
+	<string>援护</string>
+	<key>CurrenRoom</key>
+	<string>当前房间[0,0,0,+z]</string>
+	<key>assault</key>
+	<string>攻击 2000</string>
+	<key>defense</key>
+	<string>防御 2000</string>
+	<key>blood</key>
+	<string>血量 2000</string>
+	<key>evolution</key>
+	<string>进化</string>
+	<key>upgrade</key>
+	<string>升级</string>
+</dict>
+</plist>

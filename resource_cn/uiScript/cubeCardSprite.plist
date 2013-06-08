@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>cubeCardSprite</key>
+		<dict>
+			<key>initProperty</key>
+			<dict>
+				<key>pos</key>
+				<string>{50,50}</string>
+				<key>tag</key>
+				<string>2001</string>
+				<key>anchor</key>
+				<string>0,0</string>
+			</dict>
+			<key>layerFile</key>
+			<string>cubeCardSprite.map</string>
+			<key>type</key>
+			<string>Layer</string>
+			<key>z</key>
+			<string>1</string>
+		</dict>
+	</dict>
+</plist>
+
