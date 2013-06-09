@@ -667,3 +667,8 @@ void MainWindow::on_actShowEvent_triggered()
 
 
 
+
+void MainWindow::on_actUndo_triggered()
+{
+
+}

@@ -164,19 +164,19 @@ void MapEditView::mouseMoveEvent(QMouseEvent *event)
                         if((*it)!=curChoosedMapSpriteItem)
                         {
                             //非当前点击的  不吸附.  是否要添加判断多选的话是否同时吸附呢?
-                           // QPoint pos = mapWindow->getPasteGridCenterPoint(curMousePos);
+                            // QPoint pos = mapWindow->getPasteGridCenterPoint(curMousePos);
                             //MapSprite* mapSprite = mapWindow->getMapSpriteByName(mapLayerData->spriteName,mapLayerData->mapSpriteName);
-                           // QPoint offsetPoint = QPoint(pos.x()+mapSprite->getSubClipList().at(0)->position.x(),
-                           //                             pos.y()+mapSprite->getSubClipList().at(0)->position.y());
+                            // QPoint offsetPoint = QPoint(pos.x()+mapSprite->getSubClipList().at(0)->position.x(),
+                            //                             pos.y()+mapSprite->getSubClipList().at(0)->position.y());
                             (*it)->setPos(mapLayerData->pos);
                         }
                         else
                         {
-                         QPoint pos = mapWindow->getPasteGridCenterPoint(curMousePos);
-                         MapSprite* mapSprite = mapWindow->getMapSpriteByName(mapLayerData->spriteName,mapLayerData->mapSpriteName);
-                         QPoint offsetPoint = QPoint(pos.x() + mapSprite->getSubClipList().at(0)->position.x(),
-                                                    pos.y() + mapSprite->getSubClipList().at(0)->position.y());
-                         (*it)->setPos(offsetPoint);
+                            QPoint pos = mapWindow->getPasteGridCenterPoint(curMousePos);
+                            MapSprite* mapSprite = mapWindow->getMapSpriteByName(mapLayerData->spriteName,mapLayerData->mapSpriteName);
+                            QPoint offsetPoint = QPoint(pos.x() + mapSprite->getSubClipList().at(0)->position.x(),
+                                                        pos.y() + mapSprite->getSubClipList().at(0)->position.y());
+                            (*it)->setPos(offsetPoint);
                         }
                     }
                 }
@@ -193,10 +193,11 @@ void MapEditView::mouseMoveEvent(QMouseEvent *event)
             {
                 if(mapWindow->getPasteGrid())
                 {
-                    QPoint pos = mapWindow->getPasteGridCenterPoint(curMousePos);
+                    QRectF rectf=curChoosedMapSpriteItem->boundingRect();
+                    QPoint pos = mapWindow->getPasteGridCenterPointPointNear(curMousePos,rectf);
                     MapSprite* mapSprite = mapWindow->getMapSpriteByName(mapLayerData->spriteName,mapLayerData->mapSpriteName);
-                    QPoint offsetPoint = QPoint(pos.x() + mapSprite->getSubClipList().at(0)->position.x(),
-                                                pos.y() + mapSprite->getSubClipList().at(0)->position.y());
+                    QPoint offsetPoint = QPoint( pos.x()+ mapSprite->getSubClipList().at(0)->position.x(),
+                                                 pos.y() + mapSprite->getSubClipList().at(0)->position.y());
                     curChoosedMapSpriteItem->setPos(offsetPoint);
                 }
             }
@@ -268,33 +269,33 @@ void MapEditView::paintEvent(QPaintEvent *event)
             }
         }
     }
-//    if(mapWindow->getEditMode()==1)
-//    {
-////        for(QList<QGraphicsItem *> ::Iterator it=this->scene()->selectedItems().begin();
-////            it!=this->scene()->selectedItems().end();it++)
-////        {
-//            MapSpriteItem* mapSpriteItem = (MapSpriteItem*)(*it);
-//            if(mapSpriteItem)
-//            {
-//                painter.setPen(Qt::red);
-//                converPolygonF = mapSpriteItem->mapToScene(mapSpriteItem->boundingRect().toRect());
-//                converPolygon = mapFromScene(converPolygonF);
-//                painter.drawRect(converPolygon.boundingRect());
-//            }
-//        //}
+    //    if(mapWindow->getEditMode()==1)
+    //    {
+    ////        for(QList<QGraphicsItem *> ::Iterator it=this->scene()->selectedItems().begin();
+    ////            it!=this->scene()->selectedItems().end();it++)
+    ////        {
+    //            MapSpriteItem* mapSpriteItem = (MapSpriteItem*)(*it);
+    //            if(mapSpriteItem)
+    //            {
+    //                painter.setPen(Qt::red);
+    //                converPolygonF = mapSpriteItem->mapToScene(mapSpriteItem->boundingRect().toRect());
+    //                converPolygon = mapFromScene(converPolygonF);
+    //                painter.drawRect(converPolygon.boundingRect());
+    //            }
+    //        //}
 
-//    }
-//    else
-//    {
-        MapSpriteItem* mapSpriteItem = mapWindow->getCurChoosedMapSpriteItem();
-        if(mapSpriteItem)
-        {
-            painter.setPen(Qt::red);
-            converPolygonF = mapSpriteItem->mapToScene(mapSpriteItem->boundingRect().toRect());
-            converPolygon = mapFromScene(converPolygonF);
-            painter.drawRect(converPolygon.boundingRect());
-        }
-   // }
+    //    }
+    //    else
+    //    {
+    MapSpriteItem* mapSpriteItem = mapWindow->getCurChoosedMapSpriteItem();
+    if(mapSpriteItem)
+    {
+        painter.setPen(Qt::red);
+        converPolygonF = mapSpriteItem->mapToScene(mapSpriteItem->boundingRect().toRect());
+        converPolygon = mapFromScene(converPolygonF);
+        painter.drawRect(converPolygon.boundingRect());
+    }
+    // }
 
 
     //鼠标跟随画选中精灵
@@ -412,22 +413,29 @@ void MapEditView::keyPressEvent(QKeyEvent *event)
     MapLayerData* mapLayerData = mapWindow->getCurChoosedMapLayerData();
     if(curChoosedMapSpriteItem && mapLayerData != NULL)
     {
-        QPoint offsetPoint = curChoosedMapSpriteItem->pos().toPoint();
-        if(event->key() == Qt::Key_W || event->key() == Qt::Key_Up)
+        if(event->key() != Qt::Key_Delete)
         {
-            offsetPoint = QPoint(curChoosedMapSpriteItem->pos().x(),curChoosedMapSpriteItem->y() - 1);
+            QPoint offsetPoint = curChoosedMapSpriteItem->pos().toPoint();
+            if(event->key() == Qt::Key_W || event->key() == Qt::Key_Up)
+            {
+                offsetPoint = QPoint(curChoosedMapSpriteItem->pos().x(),curChoosedMapSpriteItem->y() - 1);
+            }
+            else if(event->key() == Qt::Key_S || event->key() == Qt::Key_Down) {
+                offsetPoint = QPoint(curChoosedMapSpriteItem->pos().x(),curChoosedMapSpriteItem->y() + 1);
+            }
+            else if(event->key() == Qt::Key_A || event->key() == Qt::Key_Left) {
+                offsetPoint = QPoint(curChoosedMapSpriteItem->pos().x() - 1,curChoosedMapSpriteItem->y());
+            }
+            else if(event->key() == Qt::Key_D || event->key() == Qt::Key_Right) {
+                offsetPoint = QPoint(curChoosedMapSpriteItem->pos().x() + 1,curChoosedMapSpriteItem->y());
+            }
+            curChoosedMapSpriteItem->setPos(offsetPoint);
+            mapWindow->setMapSprite();
         }
-        else if(event->key() == Qt::Key_S || event->key() == Qt::Key_Down) {
-            offsetPoint = QPoint(curChoosedMapSpriteItem->pos().x(),curChoosedMapSpriteItem->y() + 1);
+        else
+        {
+            mapWindow->delMapSprites();
         }
-        else if(event->key() == Qt::Key_A || event->key() == Qt::Key_Left) {
-            offsetPoint = QPoint(curChoosedMapSpriteItem->pos().x() - 1,curChoosedMapSpriteItem->y());
-        }
-        else if(event->key() == Qt::Key_D || event->key() == Qt::Key_Right) {
-            offsetPoint = QPoint(curChoosedMapSpriteItem->pos().x() + 1,curChoosedMapSpriteItem->y());
-        }
-        curChoosedMapSpriteItem->setPos(offsetPoint);
-        mapWindow->setMapSprite();
     }
 
 

@@ -25,6 +25,15 @@ struct StChooseMapSprite{
     QString imageName;
 };
 
+enum POINTNEAR
+{
+    LEFTTOP,
+    RIGHTTOP,
+    RIGHTBOTTOM,
+    LEFTBOTTOM
+};
+
+
 class MapWindow : public QMainWindow
 {
     Q_OBJECT
@@ -71,6 +80,8 @@ public:
     void setCurMapSpriteItem(QString mapSpriteName);
     //添加spritedata
     bool addSpriteData(SpriteData* spriteData);
+    //判断是否是靠近 上下左右的哪个定点
+    QPoint getPasteGridCenterPointPointNear(QPoint curPoint,QRectF  rectf);
     //网格吸附坐标转换
     QPoint getPasteGridCenterPoint(QPoint curPoint);
     //根据数据构建场景 打开地图时
@@ -117,7 +128,9 @@ public:
     //取得当前选中的地图精灵
     MapSpriteItem* getCurChoosedMapSpriteItem();
     MapLayerData* getCurChoosedMapLayerData();
+    MapLayerData *getByMapSpriteItemAndDel(MapSpriteItem *item,bool flag);
     MapLayerData *getByMapSpriteItem(MapSpriteItem *item);
+    void  deleteTreeItemByMapSpriteItem(MapSpriteItem *item);
 
     QList<MapSpriteItem *>  *getCurMulChooseMapSpriteItems();
     QList<MapLayerData *>  *getCurMulChooseMapLayerDatas();
@@ -140,6 +153,7 @@ public:
     void downMapLayer();
     void addMapSprite();
     void delMapSprite();
+    void delMapSprites();
     void copyMapSprite();
     void upMapSprite();
     void downMapSprite();

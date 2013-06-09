@@ -272,6 +272,11 @@ void MainWindow::on_actZoomIn_triggered()
     if(sprWin_ != NULL) {
        sprWin_->zoom_in();
     }
+    if(mapWin_)
+    {
+        mapWin_->toScaleViewAdd();
+    }
+
 }
 //缩小
 void MainWindow::on_actZoomOut_triggered()
@@ -279,12 +284,20 @@ void MainWindow::on_actZoomOut_triggered()
     if(sprWin_ != NULL) {
        sprWin_->zoom_out();
     }
+    if(mapWin_)
+    {
+        mapWin_->toScaleViewSub();
+    }
 }
 //原始大小
 void MainWindow::on_actOriginal_triggered()
 {
     if(sprWin_ != NULL) {
        sprWin_->zoom_original();
+    }
+    if(mapWin_)
+    {
+        mapWin_->toScaleHuanyuan();
     }
 }
 
@@ -654,3 +667,8 @@ void MainWindow::on_actShowEvent_triggered()
 
 
 
+
+void MainWindow::on_actUndo_triggered()
+{
+
+}

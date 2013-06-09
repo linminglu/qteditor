@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>游戏编辑器v0.2</string>
+   <string>游戏编辑器v1.0</string>
   </property>
   <property name="dockNestingEnabled">
    <bool>false</bool>
@@ -223,6 +223,9 @@
    <property name="toolTip">
     <string>放大</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl++</string>
+   </property>
   </action>
   <action name="actZoomOut">
    <property name="icon">
@@ -234,6 +237,9 @@
    </property>
    <property name="toolTip">
     <string>缩小</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
    </property>
   </action>
   <action name="actUndo">
@@ -314,6 +320,9 @@
    <property name="toolTip">
     <string>实际大小</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+/</string>
+   </property>
   </action>
   <action name="actOpenSprite">
    <property name="text">
@@ -339,7 +348,7 @@
     <string>编辑</string>
    </property>
    <property name="shortcut">
-    <string>Alt+E</string>
+    <string>Ctrl+T</string>
    </property>
   </action>
   <action name="actDragMapSprite">
@@ -386,7 +395,7 @@
     <string>网格吸附</string>
    </property>
    <property name="shortcut">
-    <string>Alt+B</string>
+    <string>Alt+X</string>
    </property>
    <property name="shortcutContext">
     <enum>Qt::WindowShortcut</enum>

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>游戏编辑器v0.2</string>
+   <string>游戏编辑器v1.0</string>
   </property>
   <property name="dockNestingEnabled">
    <bool>false</bool>

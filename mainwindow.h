@@ -109,6 +109,8 @@ private slots:
 
     void on_actionPasteGridMiddle_triggered();
 
+    void on_actUndo_triggered();
+
 protected:
     void readPathSetting();
     void writePathSetting(const QString &inPath, const int &inType);

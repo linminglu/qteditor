@@ -628,7 +628,7 @@ void MapWindow::delMapLayer()
     if(curItem) {
         int index = currentTopLevelIndex(ui->tWLayers);
         //        qDebug("choose layer index = %d",index);
-        ui->tWLayers->takeTopLevelItem(index);
+        ui->tWLayers->takeTopLevelItem(index); //删除图层的方法
 
         //删除地图上item
         MapLayer* layer = curMapData->layerList.at(index);
@@ -856,11 +856,9 @@ int MapWindow::getTopLevelIndexByTreeWidgetItem(QTreeWidget* treeWidget,QTreeWid
 //遍历地图item寻找选中的item
 MapSpriteItem* MapWindow::currentMapSpriteItem(int curLayerIndex,MapLayerData* layerData)
 {
-    //    qDebug("curLayerIndex = %d,tag = %d",curLayerIndex,layerData->tag);
     QList<QGraphicsItem*> itemList = curMap->mapEditView->scene()->items();
     for(int i = 0; i < itemList.size(); i++) {
         MapSpriteItem* item = (MapSpriteItem*)itemList.at(i);
-        //        qDebug("for layer = %d,tag = %d",item->layer(),item->tag());
         if(item->layer() == curLayerIndex && layerData->tag == item->tag()) {
             return item;
         }
@@ -887,9 +885,8 @@ MapSpriteItem* MapWindow::mapSpriteItemAtPoint(QGraphicsScene *scene,QPoint poin
     return NULL;
 }
 
-void MapWindow::on_tWLayers_itemClicked(QTreeWidgetItem *item, int column)
+void MapWindow::on_tWLayers_itemClicked(QTreeWidgetItem *item, int )
 {
-    //    qDebug("column = %d",column);
 
     QTreeWidgetItem* curItem = ui->tWLayers->currentItem();
     if(curItem) {
@@ -914,12 +911,27 @@ void MapWindow::on_tWLayers_itemClicked(QTreeWidgetItem *item, int column)
             MapLayerData* curLayerData = curLayer->layerDataList.at(intChildIndex);
             //选中精灵
             setCurChoosedMapSpriteItem(currentMapSpriteItem(topItemIndex,curLayerData));
-            //            this->setCurChoosedMapLayerData(curLayerData);
-            //            curChoosedMapSpriteItem = currentMapSpriteItem(topItemIndex,curLayerData);
             curMap->mapEditView->scene()->update();
-            //释放选择数据
-            //curChoosedMapLayerData = NULL;
         }
+    }
+}
+
+void MapWindow::delMapSprites()
+{
+    int index = currentTopLevelIndex(ui->tWLayers);
+    if(index != -1) {
+        //取得当前层的数据
+        MapLayer* curLayer = curMapData->layerList.at(index);
+         QList<QGraphicsItem *> selectitemTotal=curMap->mapEditView->scene()->selectedItems();
+        for( QList<QGraphicsItem *> ::Iterator it=selectitemTotal.begin();it!=selectitemTotal.end();it++)
+        {
+             MapLayerData* mapLayerData =getByMapSpriteItemAndDel((MapSpriteItem *)(*it),true);
+             curMap->mapEditView->scene()->removeItem((MapSpriteItem *)(*it));
+             qDebug()<<curLayer->layerDataList.count();
+             curLayer->delMapLayerData(mapLayerData);
+             qDebug()<<curLayer->layerDataList.count();
+        }
+
     }
 }
 
@@ -941,7 +953,9 @@ void MapWindow::delMapSprite()
         MapSpriteItem* mapSpriteItem = currentMapSpriteItem(index,curLayerData);
         curMap->mapEditView->scene()->removeItem(mapSpriteItem);
         //删除数据
+        qDebug()<<curLayer->layerDataList.count();
         curLayer->delMapLayerData(curLayerData);
+        qDebug()<<curLayer->layerDataList.count();
 
     }
 }
@@ -1282,6 +1296,63 @@ MapLayerData * MapWindow::getCurChoosedMapLayerData()
 {
     return curChoosedMapLayerData;
 }
+void MapWindow::deleteTreeItemByMapSpriteItem(MapSpriteItem *item)
+{
+    QTreeWidgetItem* topItem = ui->tWLayers->topLevelItem(item->layer());
+    MapLayer* mapLayer = curMapData->layerList.at(item->layer());
+    for(int i = 0; i < mapLayer->layerDataList.size(); i++)
+    {
+        MapLayerData* mapLayerData = mapLayer->layerDataList.at(i);
+        if(mapLayerData->tag == item->tag())
+        {
+            QTreeWidgetItem *item = topItem->child(i);
+            int index = currentTopLevelIndexBy(ui->tWLayers,item);
+            if(index != -1)
+            {
+                QTreeWidgetItem *curTopLevelItem = ui->tWLayers->topLevelItem(index);
+                ui->tWLayers->removeItemWidget(curTopLevelItem,0);
+                return;
+            }
+        }
+    }
+}
+ MapLayerData *MapWindow::getByMapSpriteItemAndDel(MapSpriteItem *item,bool flag)
+ {
+     QTreeWidgetItem* topItem = ui->tWLayers->topLevelItem(item->layer());
+     MapLayer* mapLayer = curMapData->layerList.at(item->layer());
+     for(int i = 0; i < mapLayer->layerDataList.size(); i++)
+     {
+         MapLayerData* mapLayerData = mapLayer->layerDataList.at(i);
+         if(mapLayerData->tag == item->tag())
+         {
+             QTreeWidgetItem *item = topItem->child(i);
+             int index = currentTopLevelIndexBy(ui->tWLayers,item);
+             if(index != -1)
+             {
+                 QTreeWidgetItem *curTopLevelItem = ui->tWLayers->topLevelItem(index);
+                 int intChildIndex = curTopLevelItem->indexOfChild(item);
+                 MapLayer* curLayer = curMapData->layerList.at(index);
+                 if(flag)
+                 {
+                    curTopLevelItem->takeChild(index);
+                 }
+                 if(intChildIndex<=curLayer->layerDataList.count()-1)
+                 {
+                     MapLayerData* curLayerData = curLayer->layerDataList.at(intChildIndex);
+                      return curLayerData;
+                 }
+                 else
+                 {
+                     return NULL;
+                 }
+
+             }
+
+         }
+     }
+
+     return NULL;
+ }
 
 MapLayerData *MapWindow::getByMapSpriteItem(MapSpriteItem *item)
 {
@@ -1298,7 +1369,6 @@ MapLayerData *MapWindow::getByMapSpriteItem(MapSpriteItem *item)
             if(index != -1)
             {
                 QTreeWidgetItem *curTopLevelItem = ui->tWLayers->topLevelItem(index);
-                //QTreeWidgetItem *curItem = ui->tWLayers->currentItem();
                 int intChildIndex = curTopLevelItem->indexOfChild(item);
                 MapLayer* curLayer = curMapData->layerList.at(index);
                 if(intChildIndex<=curLayer->layerDataList.count()-1)
@@ -1748,6 +1818,43 @@ MapSprite * MapWindow::getCurMapSprite()
     return curMapSprite;
 }
 
+QPoint MapWindow::getPasteGridCenterPointPointNear(QPoint curPoint,QRectF  rectf)
+{
+    //先找到网格的中心点
+
+    //计算所处的网格
+    int wIndex = curPoint.x()/intCurGridW;
+    int hIndex = curPoint.y()/intCurGridH;
+    QPoint gridPointCenter ;
+    QPoint centerPoint(wIndex*intCurGridW+intCurGridW/2,hIndex*intCurGridH+intCurGridH/2);
+    if(isMidPasteGid)
+    {
+        gridPointCenter = centerPoint;//QPoint(wIndex*intCurGridW+intCurGridW/2,hIndex*intCurGridH+intCurGridH/2);
+
+    }
+    else
+    {
+        if(centerPoint.x()>=curPoint.x() && centerPoint.y()>=curPoint.y())
+        {
+            gridPointCenter= QPoint(wIndex*intCurGridW,hIndex*intCurGridH);//不要把图片放到中心点 直接放到格子的左上点
+        }
+        else if(centerPoint.x()>=curPoint.x() && centerPoint.y()<=curPoint.y())
+        {
+            gridPointCenter= QPoint((wIndex)*intCurGridW,(hIndex+1)*intCurGridH-rectf.height());
+        }
+        else if(centerPoint.x()<=curPoint.x() && centerPoint.y()>=curPoint.y())
+        {
+            gridPointCenter= QPoint((wIndex+1)*intCurGridW-rectf.width(),(hIndex)*intCurGridH);
+        }
+        else if(centerPoint.x()<=curPoint.x() && centerPoint.y()<=curPoint.y())
+        {
+            gridPointCenter= QPoint((wIndex+1)*intCurGridW-rectf.width(),(hIndex+1)*intCurGridH-rectf.height());
+        }
+       // gridPointCenter= QPoint(wIndex*intCurGridW,hIndex*intCurGridH);//不要把图片放到中心点 直接放到格子的左上点
+    }
+    return gridPointCenter;
+
+}
 
 QPoint MapWindow::getPasteGridCenterPoint(QPoint curPoint)
 {
@@ -1931,7 +2038,6 @@ void MapWindow::addMapObjectData(QPoint point)
         //添加新节点
         MapObjectData* newObject = new MapObjectData(point);
         curMapData->addMapObjectData(newObject);
-        //        qDebug()<<tr("添加新节点");
     }
 }
 
@@ -1955,7 +2061,6 @@ void MapWindow::addMapObjectNextPoint(QPoint nextPoint)
                     }
                 }
                 curObject->nextPointList.append(nextPoint);
-                //                qDebug()<<tr("添加下个位置节点");
             }
         }
     }
