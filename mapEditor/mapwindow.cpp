@@ -1,4 +1,4 @@
-﻿#include <QtWidgets>
+#include <QtWidgets>
 
 #include "mapwindow.h"
 #include "ui_mapwindow.h"
@@ -9,6 +9,8 @@
 #include <QTreeWidgetItem>
 #include "utility.h"
 #include "config.h"
+#include <QtWidgets/QUndoStack>
+#include <qtwidgets/QUndoView>
 
 using namespace Utility;
 
@@ -40,7 +42,34 @@ MapWindow::MapWindow(QWidget *parent) :
 
     //    ui->tWLayers->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsEditable);
     ui->tWLayers->setSelectionMode(QAbstractItemView::ExtendedSelection);
+
+
+
+    undoStack = new QUndoStack(this);
+    createUndoView();
+    undoAction = undoStack->createUndoAction(this, tr("&Undo"));
+    redoAction = undoStack->createRedoAction(this, tr("&Redo"));
 }
+void MapWindow::toGiveMainWindowRedo()
+{
+    this->redoAction->trigger();
+}
+void MapWindow::toGiveMainWindowUndo()
+{
+    this->undoAction->trigger();
+}
+
+void MapWindow::createUndoView()
+{
+    undoView = new QUndoView(undoStack);
+    undoView->setWindowTitle(tr("Command List"));
+    undoView->show();
+    undoView->setAttribute(Qt::WA_QuitOnClose, false);
+}
+
+
+
+
 
 MapWindow::~MapWindow()
 {
@@ -574,7 +603,7 @@ void MapWindow::addMapLayerByName(QString layerName)
     item->setText(0,layerName);
     item->setCheckState(0,Qt::Checked);
 }
-
+#include "undoFloder/cundocommand.h"
 void MapWindow::addMapSpriteByMapLayerData(MapLayerData* mapLayerData,int layer)
 {
     MapSprite* mapSprite = getMapSpriteByName(mapLayerData->spriteName,mapLayerData->mapSpriteName);
@@ -595,8 +624,12 @@ void MapWindow::addMapSpriteByMapLayerData(MapLayerData* mapLayerData,int layer)
     spriteItem->setLayer(layer);
     spriteItem->setTag(mapLayerData->tag);
     spriteItem->setZValue(convertZToScene(mapLayerData->z,layer));
+    QUndoCommand *addCommand = new AddCommand(spriteItem, curMap->mapEditView->scene());
+    undoStack->push(addCommand);
 
-    curMap->mapEditView->scene()->addItem(spriteItem);
+
+
+    //curMap->mapEditView->scene()->addItem(spriteItem);
 }
 
 

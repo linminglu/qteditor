@@ -47,7 +47,8 @@ SOURCES += main.cpp\
     mapEditor/choosemapspriteview.cpp \
     mapEditor/mapspriteitem.cpp \
     mapEditor/mapeditview.cpp \
-    Data/eventdata.cpp
+    Data/eventdata.cpp \
+    undoFloder/cundocommand.cpp
 
 HEADERS  += mainwindow.h \
     mapEditor/mapwindow.h \
@@ -88,7 +89,8 @@ HEADERS  += mainwindow.h \
     mapEditor/mapspriteitem.h \
     mapEditor/mapeditview.h \
     config.h \
-    Data/eventdata.h
+    Data/eventdata.h \
+    undoFloder/cundocommand.h
 
 FORMS    += mainwindow.ui \
     mapwindow.ui \

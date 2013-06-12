@@ -1,4 +1,4 @@
-﻿#ifndef MAPWINDOW_H
+#ifndef MAPWINDOW_H
 #define MAPWINDOW_H
 
 #include <QMainWindow>
@@ -253,6 +253,15 @@ private:
     MapObjectData mapObjectData;
     //事件数据
     QList<EventData*>* eventList;
+    //public:
+public:
+  class  QUndoStack *undoStack;
+  class  QUndoView *undoView;
+  void createUndoView();
+  QAction *undoAction;
+  QAction *redoAction;
+  void toGiveMainWindowUndo();
+  void toGiveMainWindowRedo();
 
 };
 

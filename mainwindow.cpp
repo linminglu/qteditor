@@ -312,9 +312,13 @@ void MainWindow::on_actUndo_activated()
 
 void MainWindow::on_actRedo_triggered()
 {
-    if(sprWin_ != NULL) {
+    if(ui->mdiArea->currentSubWindow() == subWin_sprWin&&sprWin_ != NULL) {
         qDebug("redo");
        sprWin_->redo_Memento_ClipData();
+    }
+    if(ui->mdiArea->currentSubWindow() == subWin_mapWin && mapWin_)
+    {
+        mapWin_->toGiveMainWindowRedo();
     }
 }
 //导入sprite文件
@@ -670,5 +674,8 @@ void MainWindow::on_actShowEvent_triggered()
 
 void MainWindow::on_actUndo_triggered()
 {
-
+    if(mapWin_)
+    {
+        mapWin_->toGiveMainWindowUndo();
+    }
 }

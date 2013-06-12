@@ -3,7 +3,7 @@
     <key>spriteFileName</key>
     <string>card</string>
     <key>imagePath</key>
-    <string>../../../../UIEditor/resource_cn/img/card.png</string>
+    <string>../qteditor-master/resource_cn/img/card.png</string>
     <key>clipData</key>
     <dict>
         <key>clip0</key>
