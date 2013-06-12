@@ -579,7 +579,7 @@ chooseFileType::chooseFileType(MainWindow* mainWindow)
     connect(twFileList,SIGNAL(itemDoubleClicked ( QTreeWidgetItem*, int)),this,SLOT(on_itemDoubleClicked(QTreeWidgetItem *, int)));
 }
 
-void chooseFileType::on_itemDoubleClicked(QTreeWidgetItem * item, int column )
+void chooseFileType::on_itemDoubleClicked(QTreeWidgetItem * item, int  )
 {
     int index = twFileList->indexOfTopLevelItem(item);
     if(index == 0) {

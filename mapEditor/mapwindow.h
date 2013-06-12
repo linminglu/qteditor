@@ -213,7 +213,9 @@ private slots:
     void on_tabWMapSprite_tabCloseRequested(int index);
 
     void on_tabMap_currentChanged(int index);
-
+public:
+    //当前tab
+    MapTab* getCurMap();
 
 private:
     void uniteDockWidget();
@@ -262,6 +264,11 @@ public:
   QAction *redoAction;
   void toGiveMainWindowUndo();
   void toGiveMainWindowRedo();
+public:
+
+
+
+
 
 };
 

@@ -1,4 +1,4 @@
-﻿#ifndef MAPTAB_H
+#ifndef MAPTAB_H
 #define MAPTAB_H
 
 #include <QWidget>
@@ -17,14 +17,9 @@ public:
     explicit MapTab(QWidget *parent = 0);
     MapTab(MapWindow* mapWindow);
     ~MapTab();
-    //添加spritedata
-//    void addSpriteData(SpriteData* spriteData);
-
     MapEditView* mapEditView;
 private:
     MapWindow* mapWindow_;
-//    //所需的spritedata
-//    QList<SpriteData*> spriteDataList;
 signals:
 
 public slots:

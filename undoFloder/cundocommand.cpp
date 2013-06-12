@@ -1,51 +1,113 @@
 #include "cundocommand.h"
 #include "mapEditor/mapspriteitem.h"
+#include "mapEditor/mapwindow.h"
+#include "mapEditor/maptab.h"
 //! [7]
 AddCommand::AddCommand(MapSpriteItem *item,
-                       QGraphicsScene *scene, QUndoCommand *parent)
+                        MapWindow *grapMapWindow, QUndoCommand *parent)
     : QUndoCommand(parent)
 {
     static int itemCount = 0;
-
-    myGraphicsScene = scene;
-    myDiagramItem = item;//new MapSpriteItem(item);
-   // initialPosition = QPointF((itemCount * 15) % int(scene->width()),
-                             // (itemCount * 15) % int(scene->height()));
+    m_grapMapWindow = grapMapWindow;
+    myDiagramItem = item;
     initialPosition=myDiagramItem->pos();
-    scene->update();
+    m_grapMapWindow->getCurMap()->mapEditView->scene()->update();
     ++itemCount;
     setText(QObject::tr("Add %1")
         .arg(createCommandString(myDiagramItem, initialPosition)));
 }
-//! [7]
 
 AddCommand::~AddCommand()
 {
     if (!myDiagramItem->scene())
+    {
         delete myDiagramItem;
+    }
 }
 
-//! [8]
 void AddCommand::undo()
 {
-    myGraphicsScene->removeItem(myDiagramItem);
-    myGraphicsScene->update();
+   m_grapMapWindow->getCurMap()->mapEditView->scene()->removeItem(myDiagramItem);
+    m_grapMapWindow->getCurMap()->mapEditView->scene()->update();
 }
-//! [8]
 
-//! [9]
 void AddCommand::redo()
 {
-    myGraphicsScene->addItem(myDiagramItem);
+    m_grapMapWindow->getCurMap()->mapEditView->scene()->addItem(myDiagramItem);
     myDiagramItem->setPos(initialPosition);
-    myGraphicsScene->clearSelection();
-    myGraphicsScene->update();
+    m_grapMapWindow->getCurMap()->mapEditView->scene()->clearSelection();
+    m_grapMapWindow->getCurMap()->mapEditView->scene()->update();
 }
-//! [9]
 
 QString createCommandString(MapSpriteItem *item, const QPointF &pos)
 {
     return QObject::tr("%1 at (%2, %3)")
             .arg(item->getMapSpriteName())
         .arg(pos.x()).arg(pos.y());
+}
+
+MoveCommand::MoveCommand(MapSpriteItem *diagramItem,MapWindow *grapMapWindow, const QPointF &oldPos,
+                 QUndoCommand *parent)
+    : QUndoCommand(parent)
+{
+    m_grapMapWindow=grapMapWindow;
+    myDiagramItem = diagramItem;
+    newPos = diagramItem->pos();
+    myOldPos = oldPos;
+}
+
+bool MoveCommand::mergeWith(const QUndoCommand *command)
+{
+    const MoveCommand *moveCommand = static_cast<const MoveCommand *>(command);
+    MapSpriteItem *item = moveCommand->myDiagramItem;
+
+    if (myDiagramItem != item)
+    return false;
+
+    newPos = item->pos();
+    setText(QObject::tr("Move %1")
+        .arg(createCommandString(myDiagramItem, newPos)));
+
+    return true;
+}
+
+void MoveCommand::undo()
+{
+    myDiagramItem->setPos(myOldPos);
+    myDiagramItem->scene()->update();
+    setText(QObject::tr("Move %1")
+        .arg(createCommandString(myDiagramItem, newPos)));
+}
+
+void MoveCommand::redo()
+{
+    myDiagramItem->setPos(newPos);
+    setText(QObject::tr("Move %1")
+        .arg(createCommandString(myDiagramItem, newPos)));
+}
+
+DeleteCommand::DeleteCommand(MapWindow *grapMapWindow, QUndoCommand *parent)
+    : QUndoCommand(parent)
+{
+    m_grapMapWindow = grapMapWindow;
+    myDiagramItems=m_grapMapWindow->getCurMap()->mapEditView->scene()->selectedItems();
+    setText(QObject::tr("Delete MORE %1"));//.arg(createCommandString("myDiagramItem",QPointF(0,0))));
+}
+
+void DeleteCommand::undo()
+{
+    for(int i=0;i<myDiagramItems.count();i++)
+    {
+        m_grapMapWindow->getCurMap()->mapEditView->scene()->addItem(myDiagramItems.at(i));
+    }
+    m_grapMapWindow->getCurMap()->mapEditView->scene()->update();
+}
+
+void DeleteCommand::redo()
+{
+    for(int i=0;i<myDiagramItems.count();i++)
+    {
+        m_grapMapWindow->getCurMap()->mapEditView->scene()->removeItem(myDiagramItems.at(i));
+    }
+
 }

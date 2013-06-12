@@ -26,9 +26,6 @@ MapWindow::MapWindow(QWidget *parent) :
     curChoosedMapSpriteItem = NULL;
     curChoosedMapLayerData = NULL;
 
-    //设置地图splitter比列
-    //    ui->splitter_clip->setStretchFactor(0, 3);
-    //    ui->splitter_clip->setStretchFactor(1, 1);
 
 
     imgUp.load(":/new/prefix1/images/1.png");
@@ -95,8 +92,6 @@ void MapWindow::uniteDockWidget()
     if(isShowEvent) {
         this->tabifyDockWidget(ui->dwLayers,ui->dwEvent);
     }
-
-    //    this->tabifyDockWidget(ui->dwHistory,ui->dwSprites);
 }
 
 void MapWindow::newMap()
@@ -186,23 +181,22 @@ bool MapWindow::getPasteGrid()
     return isPasteGrid;
 }
 static int scalex=1;
-static  qreal scaley=1.0;
 
 void MapWindow::toScaleViewAdd()
 {
-//    if(scalex>1.0+0.00000001)
-//    {
-//        scalex+=0.1;
-//    }
- //   scalex+=0.1;
- //   scaley+=0.1;
+    //    if(scalex>1.0+0.00000001)
+    //    {
+    //        scalex+=0.1;
+    //    }
+    //   scalex+=0.1;
+    //   scaley+=0.1;
     scalex++;
-   curMap->mapEditView->scale(1.2,1.2);
+    curMap->mapEditView->scale(1.2,1.2);
 }
 void MapWindow::toScaleViewSub()
 {
- //   scalex-=0.1;
-//    scaley-=0.1;
+    //   scalex-=0.1;
+    //    scaley-=0.1;
     scalex--;
     curMap->mapEditView->scale(1/1.2,1/1.2);
 }
@@ -211,11 +205,11 @@ void MapWindow::toScaleHuanyuan()
 {
     if(scalex>1)
     {
-          curMap->mapEditView->scale(1/pow(1.2,scalex-1),1/pow(1.2,scalex-1));
+        curMap->mapEditView->scale(1/pow(1.2,scalex-1),1/pow(1.2,scalex-1));
     }
     else if(scalex<1)
     {
-         curMap->mapEditView->scale(pow(1.2,fabs(scalex)+1),pow(1.2,fabs(scalex)+1));
+        curMap->mapEditView->scale(pow(1.2,fabs(scalex)+1),pow(1.2,fabs(scalex)+1));
     }
 
     scalex=1;
@@ -299,19 +293,6 @@ MapSprite * MapWindow::getMapSprite()
     QString mapSpriteName = curStMapSprite.mapSpriteName;
     //寻找精灵数据
     return getMapSpriteByName(spriteName,mapSpriteName);
-    //    for(int i = 0; i < spriteDataList.size(); i++) {
-    //        SpriteData* spriteData = spriteDataList.at(i);
-    //        if(spriteData->spriteName_ == spriteName) {
-    //            //寻找地图精灵数据
-    //            for(int j = 0; j < spriteData->getMapSpriteList().size(); j++) {
-    //                MapSprite* mapSprite = spriteData->getMapSpriteList().at(j);
-    //                if(mapSprite->mapSpriteName == mapSpriteName) {
-    //                    return mapSprite;
-    //                }
-    //            }
-    //        }
-    //    }
-    //    return NULL;
 }
 
 MapSprite* MapWindow::getMapSpriteByName(QString spriteName,QString mapSpriteName)
@@ -392,12 +373,8 @@ void MapWindow::createMapLayerData(QPoint pos)
     layerData->mapSpriteName = curStMapSprite.mapSpriteName;
     layerData->spriteName = curStMapSprite.spriteName;
     //网格吸附
-    if(getPasteGrid()) {
-        //        MapSprite *mapSprite = getMapSprite();
-        //        //要将pos对应MapSprite anchor
-
-        //        QPoint curPoint = QPoint(pos.x() - mapSprite->image.width()/2,pos.y()
-        //                - mapSprite->image.height()/2);
+    if(getPasteGrid())
+    {
         layerData->pos = getPasteGridCenterPoint(pos);
     }
     else
@@ -407,16 +384,13 @@ void MapWindow::createMapLayerData(QPoint pos)
 
     //tag and z
     QTreeWidgetItem *curItem = ui->tWLayers->currentItem();
-    if(curItem) {
+    if(curItem)
+    {
         int index = currentTopLevelIndex(ui->tWLayers);
         //取得当前层的数据
         MapLayer* curLayer = curMapData->layerList.at(index);
         layerData->tag = curLayer->intMaxTag;
         curLayer->intMaxTag++;
-
-        //        QTreeWidgetItem *curTopItem = ui->tWLayers->topLevelItem(index);
-        //        int size = curTopItem->childCount();
-        //        layerData->z = size * 5;
         layerData->z = layerData->tag * 5;
     }
 
@@ -537,8 +511,7 @@ void MapWindow::openMapFile(QString fileName)
     //根据map数据构建场景
     createSceneByMapData(curMapData);
 
-    //保存一份数据
-    //    save_Memento_ClipData();
+
 }
 
 void MapWindow::saveMapFile()
@@ -561,7 +534,6 @@ void MapWindow::saveMapFile()
     }
 
     io->do_SaveMap(curMapData);
-    //    setFileModify(false);
     QFileInfo fileInfo(curMapData->mapFilePath);
     ui->tabMap->setTabText(ui->tabMap->currentIndex(),fileInfo.baseName());
 }
@@ -615,6 +587,9 @@ void MapWindow::addMapSpriteByMapLayerData(MapLayerData* mapLayerData,int layer)
         qDebug() << "no mapSpriteSubClip";
         return;
     }
+
+
+
     //    QString imageName = getImageName();
     MapSpriteItem* spriteItem = new MapSpriteItem(mapSprite,"");
     //偏移量
@@ -624,7 +599,9 @@ void MapWindow::addMapSpriteByMapLayerData(MapLayerData* mapLayerData,int layer)
     spriteItem->setLayer(layer);
     spriteItem->setTag(mapLayerData->tag);
     spriteItem->setZValue(convertZToScene(mapLayerData->z,layer));
-    QUndoCommand *addCommand = new AddCommand(spriteItem, curMap->mapEditView->scene());
+
+
+    QUndoCommand *addCommand = new AddCommand(spriteItem,this);
     undoStack->push(addCommand);
 
 
@@ -638,11 +615,6 @@ void MapWindow::addMapLayer()
     //添加图层界面
     QString layerName = tr("newLayer");
     addMapLayerByName(layerName);
-    //    QString layerName = tr("新图层");
-    //    QTreeWidgetItem *item = new QTreeWidgetItem(ui->tWLayers);
-    //    item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsEditable);
-    //    item->setText(0,layerName);
-    //    item->setCheckState(0,Qt::Checked);
 
     //添加数据
     MapLayer* layer = new MapLayer();
@@ -955,14 +927,14 @@ void MapWindow::delMapSprites()
     if(index != -1) {
         //取得当前层的数据
         MapLayer* curLayer = curMapData->layerList.at(index);
-         QList<QGraphicsItem *> selectitemTotal=curMap->mapEditView->scene()->selectedItems();
+        QList<QGraphicsItem *> selectitemTotal=curMap->mapEditView->scene()->selectedItems();
         for( QList<QGraphicsItem *> ::Iterator it=selectitemTotal.begin();it!=selectitemTotal.end();it++)
         {
-             MapLayerData* mapLayerData =getByMapSpriteItemAndDel((MapSpriteItem *)(*it),true);
-             curMap->mapEditView->scene()->removeItem((MapSpriteItem *)(*it));
-             qDebug()<<curLayer->layerDataList.count();
-             curLayer->delMapLayerData(mapLayerData);
-             qDebug()<<curLayer->layerDataList.count();
+            MapLayerData* mapLayerData =getByMapSpriteItemAndDel((MapSpriteItem *)(*it),true);
+            curMap->mapEditView->scene()->removeItem((MapSpriteItem *)(*it));
+            qDebug()<<curLayer->layerDataList.count();
+            curLayer->delMapLayerData(mapLayerData);
+            qDebug()<<curLayer->layerDataList.count();
         }
 
     }
@@ -1349,43 +1321,43 @@ void MapWindow::deleteTreeItemByMapSpriteItem(MapSpriteItem *item)
         }
     }
 }
- MapLayerData *MapWindow::getByMapSpriteItemAndDel(MapSpriteItem *item,bool flag)
- {
-     QTreeWidgetItem* topItem = ui->tWLayers->topLevelItem(item->layer());
-     MapLayer* mapLayer = curMapData->layerList.at(item->layer());
-     for(int i = 0; i < mapLayer->layerDataList.size(); i++)
-     {
-         MapLayerData* mapLayerData = mapLayer->layerDataList.at(i);
-         if(mapLayerData->tag == item->tag())
-         {
-             QTreeWidgetItem *item = topItem->child(i);
-             int index = currentTopLevelIndexBy(ui->tWLayers,item);
-             if(index != -1)
-             {
-                 QTreeWidgetItem *curTopLevelItem = ui->tWLayers->topLevelItem(index);
-                 int intChildIndex = curTopLevelItem->indexOfChild(item);
-                 MapLayer* curLayer = curMapData->layerList.at(index);
-                 if(flag)
-                 {
+MapLayerData *MapWindow::getByMapSpriteItemAndDel(MapSpriteItem *item,bool flag)
+{
+    QTreeWidgetItem* topItem = ui->tWLayers->topLevelItem(item->layer());
+    MapLayer* mapLayer = curMapData->layerList.at(item->layer());
+    for(int i = 0; i < mapLayer->layerDataList.size(); i++)
+    {
+        MapLayerData* mapLayerData = mapLayer->layerDataList.at(i);
+        if(mapLayerData->tag == item->tag())
+        {
+            QTreeWidgetItem *item = topItem->child(i);
+            int index = currentTopLevelIndexBy(ui->tWLayers,item);
+            if(index != -1)
+            {
+                QTreeWidgetItem *curTopLevelItem = ui->tWLayers->topLevelItem(index);
+                int intChildIndex = curTopLevelItem->indexOfChild(item);
+                MapLayer* curLayer = curMapData->layerList.at(index);
+                if(flag)
+                {
                     curTopLevelItem->takeChild(index);
-                 }
-                 if(intChildIndex<=curLayer->layerDataList.count()-1)
-                 {
-                     MapLayerData* curLayerData = curLayer->layerDataList.at(intChildIndex);
-                      return curLayerData;
-                 }
-                 else
-                 {
-                     return NULL;
-                 }
+                }
+                if(intChildIndex<=curLayer->layerDataList.count()-1)
+                {
+                    MapLayerData* curLayerData = curLayer->layerDataList.at(intChildIndex);
+                    return curLayerData;
+                }
+                else
+                {
+                    return NULL;
+                }
 
-             }
+            }
 
-         }
-     }
+        }
+    }
 
-     return NULL;
- }
+    return NULL;
+}
 
 MapLayerData *MapWindow::getByMapSpriteItem(MapSpriteItem *item)
 {
@@ -1407,7 +1379,7 @@ MapLayerData *MapWindow::getByMapSpriteItem(MapSpriteItem *item)
                 if(intChildIndex<=curLayer->layerDataList.count()-1)
                 {
                     MapLayerData* curLayerData = curLayer->layerDataList.at(intChildIndex);
-                     return curLayerData;
+                    return curLayerData;
                 }
                 else
                 {
@@ -1423,7 +1395,7 @@ MapLayerData *MapWindow::getByMapSpriteItem(MapSpriteItem *item)
 }
 
 
-void MapWindow::setCurChoosedMapSpriteItem(MapSpriteItem *item,bool isAltKeyDowning)
+void MapWindow::setCurChoosedMapSpriteItem(MapSpriteItem *item,bool )
 {
     curChoosedMapSpriteItem = item;
     int index = currentTopLevelIndex(ui->tWLayers);
@@ -1441,21 +1413,21 @@ void MapWindow::setCurChoosedMapSpriteItem(MapSpriteItem *item,bool isAltKeyDown
 
 }
 
-void MapWindow::setCurChoosedMapSpriteItemInTree(MapSpriteItem *item,bool isAltKeyDowning)
+void MapWindow::setCurChoosedMapSpriteItemInTree(MapSpriteItem *item,bool )
 {
-        QTreeWidgetItem* topItem = ui->tWLayers->topLevelItem(item->layer());
-        MapLayer* mapLayer = curMapData->layerList.at(item->layer());
-        for(int i = 0; i < mapLayer->layerDataList.size(); i++)
+    QTreeWidgetItem* topItem = ui->tWLayers->topLevelItem(item->layer());
+    MapLayer* mapLayer = curMapData->layerList.at(item->layer());
+    for(int i = 0; i < mapLayer->layerDataList.size(); i++)
+    {
+        MapLayerData* mapLayerData = mapLayer->layerDataList.at(i);
+        if(mapLayerData->tag == item->tag())
         {
-            MapLayerData* mapLayerData = mapLayer->layerDataList.at(i);
-            if(mapLayerData->tag == item->tag())
-            {
-                QTreeWidgetItem *item = topItem->child(i);
-                ui->tWLayers->setCurrentItem(item);
-              //  item->setSelected(true);
-                break;
-            }
+            QTreeWidgetItem *item = topItem->child(i);
+            ui->tWLayers->setCurrentItem(item);
+            //  item->setSelected(true);
+            break;
         }
+    }
 }
 
 //设置当前选中的mapLayerData
@@ -1883,7 +1855,7 @@ QPoint MapWindow::getPasteGridCenterPointPointNear(QPoint curPoint,QRectF  rectf
         {
             gridPointCenter= QPoint((wIndex+1)*intCurGridW-rectf.width(),(hIndex+1)*intCurGridH-rectf.height());
         }
-       // gridPointCenter= QPoint(wIndex*intCurGridW,hIndex*intCurGridH);//不要把图片放到中心点 直接放到格子的左上点
+        // gridPointCenter= QPoint(wIndex*intCurGridW,hIndex*intCurGridH);//不要把图片放到中心点 直接放到格子的左上点
     }
     return gridPointCenter;
 
@@ -1912,7 +1884,7 @@ QPoint MapWindow::getPasteGridCenterPoint(QPoint curPoint)
 
 
 
-void MapWindow::on_tWLayers_doubleClicked(const QModelIndex &index)
+void MapWindow::on_tWLayers_doubleClicked(const QModelIndex &)
 {
     QTreeWidgetItem* curItem = ui->tWLayers->currentItem();
     if(curItem) {
@@ -1940,7 +1912,7 @@ void MapWindow::on_tWLayers_doubleClicked(const QModelIndex &index)
     }
 }
 
-void MapWindow::on_tWLayers_itemChanged(QTreeWidgetItem *item, int column)
+void MapWindow::on_tWLayers_itemChanged(QTreeWidgetItem *item, int )
 {
     int index = ui->tWLayers->indexOfTopLevelItem(item);
     if(index != -1 && index < curMapData->layerList.size()) {
@@ -1990,6 +1962,12 @@ void MapWindow::changeMapEditViewBackGround()
         }
 
     }
+}
+
+MapTab* MapWindow::getCurMap()
+{
+    Q_ASSERT(curMap!=NULL);
+    return curMap;
 }
 
 void MapWindow::on_tabMap_currentChanged(int index)
@@ -2299,7 +2277,7 @@ void ModifyMapSpriteInfoDialog::on_btnConfirm_clicked()
     close();
 }
 
-void ModifyMapSpriteInfoDialog::changeLayer(int lay)
+void ModifyMapSpriteInfoDialog::changeLayer(int )
 {
 
 }

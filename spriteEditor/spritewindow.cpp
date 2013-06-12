@@ -1,4 +1,4 @@
-﻿#include "spritewindow.h"
+#include "spritewindow.h"
 #include "ui_spritewindow.h"
 //#include <QtGui>
 #include <QGraphicsItem>
@@ -670,11 +670,11 @@ void SpriteWindow::delMapSprite()
 {
 }
 
-void SpriteWindow::addMapSpriteSubClip(Clip *clip)
+void SpriteWindow::addMapSpriteSubClip(Clip *)
 {
 }
 
-void SpriteWindow::delMapSpriteSubClip(Clip *clip)
+void SpriteWindow::delMapSpriteSubClip(Clip *)
 {
 }
 
